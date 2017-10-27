@@ -6,7 +6,6 @@ import com.alexe1ka.model.Genre;
 
 import java.io.*;
 import java.util.Calendar;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,28 +31,28 @@ public class TestData {
         Calendar calendar3 = Calendar.getInstance();
         calendar3.set(1990, 0, 0);
         books.add(new BookImpl("Introduction to psychoanalize", "Zigmund Freid",
-                calendar2.getTime(),
+                calendar3.getTime(),
                 Genre.SCIENCE,
                 379));
 
         Calendar calendar4 = Calendar.getInstance();
         calendar4.set(1990, 0, 0);
         books.add(new BookImpl("Introduction to psychoanalize", "Zigmund Freid",
-                calendar2.getTime(),
+                calendar4.getTime(),
                 Genre.SCIENCE,
                 379));
 
         Calendar calendar5 = Calendar.getInstance();
         calendar5.set(1997, 0, 0);
         books.add(new BookImpl("Harry Potter and the Philosopher's Stone", "Dj. Rouling",
-                calendar2.getTime(),
+                calendar5.getTime(),
                 Genre.FAIRYTALE,
                 500));
 
         Calendar calendar6 = Calendar.getInstance();
         calendar6.set(1997, 0, 0);
         books.add(new BookImpl("Core Java.Volume II - Advanced Features", "Cay Horstmann",
-                calendar2.getTime(),
+                calendar6.getTime(),
                 Genre.TRILLER,
                 500));
 
@@ -72,7 +71,7 @@ public class TestData {
 
     }
 
-    private void saveToFile(Set<Book> books) {
+    public void saveToFile(Set<Book> books) {
         try {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream("books"));
             objectOutputStream.writeObject(books);
@@ -83,7 +82,7 @@ public class TestData {
         }
     }
 
-    private Set<Book> readFromFile() {
+    public Set<Book> readFromFile() {
         Set<Book> books = null;
         try {
             ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("books"));

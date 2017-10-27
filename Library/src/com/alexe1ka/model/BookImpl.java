@@ -42,6 +42,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
         this.authors = authors;
     }
 
+    @Override
     public Date getYearOfPublishing() {
         return yearOfPublishing;
     }
@@ -50,6 +51,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
         this.yearOfPublishing = yearOfPublishing;
     }
 
+    @Override
     public Genre getGenre() {
         return genre;
     }
@@ -58,6 +60,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
         this.genre = genre;
     }
 
+    @Override
     public int getPageCount() {
         return pageCount;
     }
