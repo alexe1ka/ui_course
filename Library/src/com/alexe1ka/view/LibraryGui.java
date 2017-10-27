@@ -40,12 +40,22 @@ public class LibraryGui {
 
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
+        frame.setSize(1000, 500);
         frame.setResizable(false);
 
         //вкладка с книгами отображает таблицу со всеми книгами.формирование таблицы
         //формирование таблицы с помощью класса MyTableModel
         bookTable = new JTable(tableModel);
+        bookTable.setRowHeight(30);
+        bookTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        bookTable.getColumnModel().getColumn(0).setPreferredWidth(300);
+        bookTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+        bookTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        bookTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        bookTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        bookTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
+
         Font font = new Font("TimesNewRoman", Font.BOLD, 14);
         bookTable.setFont(font);
         bookScroller = new JScrollPane(bookTable);
@@ -92,9 +102,10 @@ public class LibraryGui {
         jTabbedPane.addTab("Books", bookScroller);
         jTabbedPane.addTab("Readers", readerScroller);
         jPanel = new JPanel();
+        jPanel.setLayout(new GridLayout());
         jPanel.add(jTabbedPane);
 
-//меню действий
+        //меню действий
         JMenuBar jMenuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem addNewItem = new JMenuItem("Add new");
@@ -106,7 +117,7 @@ public class LibraryGui {
 
         jMenuBar.add(fileMenu);
         frame.setJMenuBar(jMenuBar);
-        frame.getContentPane().add(BorderLayout.CENTER, jPanel);
+        frame.getContentPane().add(jPanel);
         frame.setVisible(true);
 
     }
