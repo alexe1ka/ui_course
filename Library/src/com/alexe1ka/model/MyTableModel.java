@@ -25,7 +25,7 @@ public class MyTableModel implements TableModel {
 
     @Override
     public int getColumnCount() {
-        return 5;
+        return 6;
     }
 
     @Override

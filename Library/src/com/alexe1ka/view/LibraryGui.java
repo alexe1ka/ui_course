@@ -16,9 +16,10 @@ import java.util.Set;
 public class LibraryGui {
     private JFrame frame;
     private JPanel panel;
-    private JTable table;
-    private JScrollPane scroller;
+    private JTable bookTable;
+    private JScrollPane scrollerBook;
     private Button editButton;
+    private JTabbedPane jTabbedPane;
 
 
     public void gui() {
@@ -35,39 +36,45 @@ public class LibraryGui {
         frame.setResizable(false);
 
 
-        table = new JTable(tableModel);
+        bookTable = new JTable(tableModel);
         Font font = new Font("TimesNewRoman", Font.BOLD, 14);
-        table.setFont(font);
+        bookTable.setFont(font);
 
-        scroller = new JScrollPane(table);
-        scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollerBook = new JScrollPane(bookTable);
+        scrollerBook.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollerBook.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         JComboBox comboBox = new JComboBox();
         Genre[] listOfEnumValue = Genre.values();
-        for (int i = 0;i<listOfEnumValue.length;i++){
+        for (int i = 0; i < listOfEnumValue.length; i++) {
             comboBox.addItem(listOfEnumValue[i]);
         }
-        table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
+        bookTable.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
 
 
-
-        editButton = new Button("Edit table");
+        editButton = new Button("Edit bookTable");
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             }
         });
 
+
+        jTabbedPane = new JTabbedPane();
+        jTabbedPane.addTab("Books", scrollerBook);
+        jTabbedPane.addTab("Readers", new JPanel());
+
         panel = new JPanel();
-        panel.add(scroller);
+        panel.add(jTabbedPane);
 
 
         JMenuBar jMenuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenuItem addNewItem = new JMenuItem("Add new");
+        JMenuItem saveItem = new JMenuItem("Save all");
         JMenuItem clearListItem = new JMenuItem("Clear all");
         fileMenu.add(addNewItem);
+        fileMenu.add(saveItem);
         fileMenu.add(clearListItem);
 
         jMenuBar.add(fileMenu);
