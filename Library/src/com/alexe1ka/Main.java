@@ -5,8 +5,9 @@ import com.alexe1ka.view.LibraryGui;
 public class Main {
 
     public static void main(String[] args) {
-        TestData testData = new TestData();
-        testData.makeWork();
+//        TestData testData = new TestData();
+//        testData.testBook();
+//        testData.testReader();
         LibraryGui start= new LibraryGui();
         start.gui();
 
