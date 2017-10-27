@@ -10,18 +10,20 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     private Date yearOfPublishing;//здесь используется дата,только потому что это написано в задании.
     private Genre genre;
     private int pageCount;
+    private boolean inStorehouse;
 
     private int version = 1;
 
     public BookImpl() {
     }
 
-    public BookImpl(String title, String author, Date yearOfPublishing, Genre genre, int pageCount) {
+    public BookImpl(String title, String author, Date yearOfPublishing, Genre genre, int pageCount, boolean inStorehouse) {
         this.title = title;
         this.authors = author;
         this.yearOfPublishing = yearOfPublishing;
         this.genre = genre;
         this.pageCount = pageCount;
+        this.inStorehouse = inStorehouse;
     }
 
     @Override
@@ -69,6 +71,15 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
         this.pageCount = pageCount;
     }
 
+    @Override
+    public boolean isInStorehouse() {
+        return inStorehouse;
+    }
+
+    public void setInStorehouse(boolean inStorehouse) {
+        this.inStorehouse = inStorehouse;
+    }
+
     public int getVersion() {
         return version;
     }
@@ -95,13 +106,14 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
         String onlyYear = dateFormat.format(yearOfPublishing);
-
-        return "Book{" +
+        return "BookImpl{" +
                 "title='" + title + '\'' +
                 ", authors='" + authors + '\'' +
                 ", yearOfPublishing=" + onlyYear +
                 ", genre=" + genre +
                 ", pageCount=" + pageCount +
+                ", inStorehouse=" + inStorehouse +
+                ", version=" + version +
                 '}';
     }
 

@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Set;
 
 public class MyTableModel implements TableModel {
+
+    //table model работает в связке с моей моделью
     private Set<TableModelListener> listeners = new HashSet<>();
 
-    private List<Book> books = null;
+    private List<BookImpl> books = null;
 
-    public MyTableModel(List<Book> books) {
+    public MyTableModel(List<BookImpl> books) {
         this.books = books;
     }
 
@@ -39,6 +41,8 @@ public class MyTableModel implements TableModel {
                 return "Genre";
             case 4:
                 return "Pages";
+            case 5:
+                return "Availability";
         }
         return null;
     }
@@ -56,6 +60,8 @@ public class MyTableModel implements TableModel {
                 return Genre.class;
             case 4:
                 return Integer.class;
+            case 5:
+                return Boolean.class;
         }
         return null;
     }
@@ -79,13 +85,35 @@ public class MyTableModel implements TableModel {
                 return book.getGenre();
             case 4:
                 return book.getPageCount();
+            case 5:
+                return book.isInStorehouse();
         }
         return null;
     }
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
+        BookImpl book = books.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                book.setAuthors((String) aValue);
+                break;
+            case 1:
+                book.setAuthors((String) aValue);
+                break;
+            case 2:
+                book.setYearOfPublishing((Date) aValue);
+                break;
+            case 3:
+                book.setGenre((Genre) aValue);
+                break;
+            case 4:
+                book.setPageCount((int) aValue);
+                break;
+            case 5:
+                book.setInStorehouse((boolean) aValue);
+                break;
+        }
     }
 
     @Override
