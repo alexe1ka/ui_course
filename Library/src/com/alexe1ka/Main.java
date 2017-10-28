@@ -8,6 +8,7 @@ public class Main {
 //        TestData testData = new TestData();
 //        testData.testBook();
 //        testData.testReader();
+//TODO вылетает exception если нет файлов
         LibraryGui start= new LibraryGui();
         start.gui();
 

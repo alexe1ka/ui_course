@@ -114,6 +114,7 @@ public class MyTableModel implements TableModel {
                 book.setInStorehouse((boolean) aValue);
                 break;
         }
+
     }
 
     @Override

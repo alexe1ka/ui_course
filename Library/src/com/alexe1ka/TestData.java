@@ -67,7 +67,7 @@ public class TestData {
             System.out.println(book);
         }
 
-        saveToFile(books, "book.txt");
+        saveToFile(books, "books");
 
         Set<?> readedSet = readBookFromFile();
         System.out.println("set from file");
@@ -90,7 +90,7 @@ public class TestData {
                 "James Hetfield", book3, 8555999999L, "5555-111", calendar2.getTime()
         ));
 
-        saveToFile(bookReaders,"readers");
+        saveToFile(bookReaders, "readers");
         Set<?> readedSet = readReaderFromFile();
         System.out.println("readers from file");
         for (Object aReadedSet : readedSet) {
