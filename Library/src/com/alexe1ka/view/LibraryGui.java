@@ -6,7 +6,9 @@ import com.sun.org.apache.xpath.internal.operations.String;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,8 @@ import java.util.Set;
 public class LibraryGui {
     private JFrame frame;
     private JTabbedPane jTabbedPane;
+    private JPanel bookPanel;
+    private JPanel readerPanel;
     private JPanel jPanel;
     private JTable bookTable;
     private JScrollPane bookScroller;
@@ -26,6 +30,7 @@ public class LibraryGui {
     private JScrollPane readerScroller;
 
     private Button newBookButton;
+    private Button newReaderButton;
 
     private int count = 0;
 
@@ -37,6 +42,7 @@ public class LibraryGui {
         listBooks.addAll(testData.readBookFromFile());
         MyTableModel bookTableModel = new MyTableModel(listBooks);
 
+
         List<BookReader> readerList = new ArrayList<>();
         readerList.addAll(testData.readReaderFromFile());
 
@@ -44,6 +50,9 @@ public class LibraryGui {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 500);
         frame.setResizable(false);
+
+        bookPanel = new JPanel();
+        readerPanel = new JPanel();
 
         //вкладка с книгами отображает таблицу со всеми книгами.формирование таблицы
         //формирование таблицы с помощью класса MyTableModel
@@ -96,28 +105,41 @@ public class LibraryGui {
         newBookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.set(1997, 0, 0);
-//                Book book = new BookImpl("Core Java", "Cay Horstmann",
-//                        calendar.getTime(),
-//                        Genre.TRILLER,
-//                        500, false);
-//                bookTableModel.setValueAt(book, bookTable.getRowCount() - 1, bookTable.getColumnCount());
-                model.insertRow(model.getRowCount(), new Object[]{null, null, null, null, null});
-
-
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(1997, 0, 0);
+                BookImpl book = new BookImpl("Core Java", "Cay Horstmann",
+                        calendar.getTime(),
+                        Genre.TRILLER,
+                        500, false);
+                bookTableModel.addNewBook(new BookImpl(null, null, null, null, null, false));
+                bookTable.setAutoResizeMode(1);
             }
         });
 
-
+        newReaderButton = new Button("Add new reader");
+        newReaderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                model.insertRow(model.getRowCount(), new Object[]{null, null, null, null, null});
+            }
+        });
         //вкладки
+        bookPanel.setLayout(new GridLayout());
+        //bookPanel.setLayout(new BorderLayout());
+        bookPanel.add(bookScroller);
+        bookPanel.add(newBookButton);
+
+
+        readerPanel.add(readerScroller);
+        readerPanel.add(newReaderButton);
+
+
         jTabbedPane = new JTabbedPane();
-        jTabbedPane.addTab("Books", bookScroller);
-        jTabbedPane.addTab("Readers", readerScroller);
+        jTabbedPane.addTab("Books", bookPanel);
+        jTabbedPane.addTab("Readers", readerPanel);
         jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
         jPanel.add(jTabbedPane);
-        jPanel.add(BorderLayout.SOUTH, newBookButton);
         //меню действий
         JMenuBar jMenuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");

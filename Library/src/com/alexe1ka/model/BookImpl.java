@@ -9,7 +9,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     private String authors;
     private Date yearOfPublishing;//здесь используется дата,только потому что это написано в задании.
     private Genre genre;
-    private int pageCount;
+    private Integer pageCount;
     private boolean inStorehouse;
 
     private int version = 1;
@@ -17,7 +17,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     public BookImpl() {
     }
 
-    public BookImpl(String title, String author, Date yearOfPublishing, Genre genre, int pageCount, boolean inStorehouse) {
+    public BookImpl(String title, String author, Date yearOfPublishing, Genre genre, Integer pageCount, boolean inStorehouse) {
         this.title = title;
         this.authors = author;
         this.yearOfPublishing = yearOfPublishing;
@@ -63,11 +63,11 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     }
 
     @Override
-    public int getPageCount() {
+    public Integer getPageCount() {
         return pageCount;
     }
 
-    public void setPageCount(int pageCount) {
+    public void setPageCount(Integer pageCount) {
         this.pageCount = pageCount;
     }
 

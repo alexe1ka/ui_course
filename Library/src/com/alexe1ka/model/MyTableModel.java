@@ -1,6 +1,7 @@
 package com.alexe1ka.model;
 
 import javax.swing.event.TableModelListener;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.util.Date;
 import java.util.HashSet;
@@ -18,8 +19,14 @@ public class MyTableModel implements TableModel {
         this.books = books;
     }
 
+    public void addNewBook(BookImpl book) {
+        books.add(book);
+
+    }
+
     @Override
     public int getRowCount() {
+//        System.out.println("size of books: "+books.size());
         return books.size();
     }
 
@@ -114,7 +121,6 @@ public class MyTableModel implements TableModel {
                 book.setInStorehouse((boolean) aValue);
                 break;
         }
-
     }
 
     @Override

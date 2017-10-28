@@ -11,7 +11,7 @@ public interface Book {
 
     Genre getGenre();
 
-    int getPageCount();
+    Integer getPageCount();
 
     boolean isInStorehouse();
 
