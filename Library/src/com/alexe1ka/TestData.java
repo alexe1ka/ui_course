@@ -12,53 +12,59 @@ import java.util.TreeSet;
 public class TestData {
     BookImpl book1;
     BookImpl book3;
+    private static TestData instance;
 
+    public static TestData getInstance() {
+        if (instance == null) {
+            instance = new TestData();
+        }
+        return instance;
+    }
+
+    private TestData() {
+    }
+
+
+    //тестовый набор книжек
     public void testBook() {
         Set<BookImpl> books = new TreeSet<>();
 
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(2017, 0, 0);
         book1 = new BookImpl("Android for professional 3", "Philips B,Stuart K,Marsikano k",
-                calendar1.getTime(),
+                "2017",
                 Genre.SCIENCE,
                 688,
                 false);
         books.add(book1);
 
-        Calendar calendar2 = Calendar.getInstance();
-        calendar2.set(2016, 0, 0);
+
         books.add(new BookImpl("Android for professional 2", "Philips B,Stuart K,Marsikano k",
-                calendar2.getTime(),
+                "2016",
                 Genre.SCIENCE,
                 640,
                 true));
 
-        Calendar calendar3 = Calendar.getInstance();
-        calendar3.set(1990, 0, 0);
+
         book3 = new BookImpl("Introduction to psychoanalize", "Zigmund Freid",
-                calendar3.getTime(),
+                "1990",
                 Genre.SCIENCE,
                 379, false);
         books.add(book3);
 
-        Calendar calendar4 = Calendar.getInstance();
-        calendar4.set(1990, 0, 0);
+
         books.add(new BookImpl("Introduction to psychoanalize", "Zigmund Freid",
-                calendar4.getTime(),
+                "1990",
                 Genre.SCIENCE,
                 379, true));
 
-        Calendar calendar5 = Calendar.getInstance();
-        calendar5.set(1997, 0, 0);
+
         books.add(new BookImpl("Harry Potter and the Philosopher's Stone", "Dj. Rouling",
-                calendar5.getTime(),
+                "2000",
                 Genre.FAIRYTALE,
                 500, true));
 
-        Calendar calendar6 = Calendar.getInstance();
-        calendar6.set(1997, 0, 0);
+
         books.add(new BookImpl("Core Java.Volume II - Advanced Features", "Cay Horstmann",
-                calendar6.getTime(),
+                "2017",
                 Genre.TRILLER,
                 500, false));
 
@@ -69,7 +75,7 @@ public class TestData {
 
         saveToFile(books, "books");
 
-        Set<?> readedSet = readBookFromFile();
+        Set<?> readedSet = readBookFromFile("books");
         System.out.println("set from file");
         for (Object aReadedSet : readedSet) {
             System.out.println(aReadedSet);
@@ -109,10 +115,10 @@ public class TestData {
         }
     }
 
-    public Set<BookImpl> readBookFromFile() {
+    public Set<BookImpl> readBookFromFile(String filename) {
         Set<BookImpl> books = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("books"));
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
             books = (Set<BookImpl>) objectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();

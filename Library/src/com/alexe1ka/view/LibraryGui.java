@@ -1,21 +1,21 @@
 package com.alexe1ka.view;
 
 import com.alexe1ka.TestData;
-import com.alexe1ka.model.*;
-import com.sun.org.apache.xpath.internal.operations.String;
+import com.alexe1ka.model.BookImpl;
+import com.alexe1ka.model.BookReader;
+import com.alexe1ka.model.Genre;
+import com.alexe1ka.model.MyTableModel;
 
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class LibraryGui {
     private JFrame frame;
@@ -32,14 +32,14 @@ public class LibraryGui {
     private Button newBookButton;
     private Button newReaderButton;
 
-    private int count = 0;
+    private Button saveBookList;
+    private Button saveReaderList;
 
 
     public void gui() {
-        TestData testData = new TestData();
-//        Set<BookImpl> books = testData.readBookFromFile();
+        TestData testData = TestData.getInstance();
         List<BookImpl> listBooks = new ArrayList<>();
-        listBooks.addAll(testData.readBookFromFile());
+        //listBooks.addAll(testData.readBookFromFile());// добавление тестовых данных
         MyTableModel bookTableModel = new MyTableModel(listBooks);
 
 
@@ -49,8 +49,9 @@ public class LibraryGui {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(1000, 500);
-        frame.setResizable(false);
+//        frame.setResizable(false); //запрет на изменение размера фрейма
 
+        //создаем две панели - одна для книжек,другая для читателей
         bookPanel = new JPanel();
         readerPanel = new JPanel();
 
@@ -58,8 +59,6 @@ public class LibraryGui {
         //формирование таблицы с помощью класса MyTableModel
         bookTable = new JTable(bookTableModel);
         bookTable.setRowHeight(30);
-
-
         bookTable.getColumnModel().getColumn(0).setPreferredWidth(300);
         bookTable.getColumnModel().getColumn(1).setPreferredWidth(300);
         bookTable.getColumnModel().getColumn(2).setPreferredWidth(100);
@@ -67,11 +66,14 @@ public class LibraryGui {
         bookTable.getColumnModel().getColumn(4).setPreferredWidth(100);
         bookTable.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
 
-        Font font = new Font("TimesNewRoman", Font.BOLD, 14);
+        Font font = new Font("TimesNewRoman", Font.BOLD, 12);
         bookTable.setFont(font);
         bookScroller = new JScrollPane(bookTable);
         bookScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         bookScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+
+        //выбор жанра из существующих
         JComboBox comboBox = new JComboBox();
         Genre[] listOfEnumValue = Genre.values();
         for (int i = 0; i < listOfEnumValue.length; i++) {
@@ -79,40 +81,36 @@ public class LibraryGui {
         }
         bookTable.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
 
+
         //вкладка с читателями отображает вкладку с читателями,которые взяли книги из хранилища
         //здесь другой способ формирования таблицы - с помощью DefaultTableModel
         //чтобы нормально раскидать BookReader по столбцам,написан костыль в виде метода getFieldArray
         //TODO второй таблицы в Book сделать cellEditor со списком книг из первой таблицы
         DefaultTableModel model = new DefaultTableModel();
         readerTable = new JTable(model);
+        readerTable.setFont(font);
         model.addColumn("Reader name");
         model.addColumn("Taking book");
         model.addColumn("Phone number");
         model.addColumn("Number of passport");
         model.addColumn("Date of taking book");
 
-
         for (int i = 0; i < readerList.size(); i++) {
             model.insertRow(i, readerList.get(i).getFieldArray());
         }
         model.fireTableDataChanged();
+        readerTable.setRowHeight(30);
 
         readerScroller = new JScrollPane(readerTable);
         readerScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         readerScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-        newBookButton = new Button("Edit bookTable");
+        newBookButton = new Button("New book");
         newBookButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(1997, 0, 0);
-                BookImpl book = new BookImpl("Core Java", "Cay Horstmann",
-                        calendar.getTime(),
-                        Genre.TRILLER,
-                        500, false);
-                bookTableModel.addNewBook(new BookImpl(null, null, null, null, null, false));
-                bookTable.setAutoResizeMode(1);
+                bookTableModel.addNewBook(new BookImpl(null, null, null, null, null, false));//создаю пустую книгу
+                bookTable.updateUI();
             }
         });
 
@@ -123,29 +121,71 @@ public class LibraryGui {
                 model.insertRow(model.getRowCount(), new Object[]{null, null, null, null, null});
             }
         });
+
+        saveBookList = new Button("Save new list");
+        saveBookList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Set<BookImpl> set = new TreeSet<>();
+                set.addAll(bookTableModel.getBooksList());
+                testData.saveToFile(set, "books");
+            }
+
+        });
+
+        saveReaderList = new Button("Save new list");
+
         //вкладки
-        bookPanel.setLayout(new GridLayout());
-        //bookPanel.setLayout(new BorderLayout());
+//        bookPanel.setLayout(new GridLayout());
+        bookPanel.setLayout(new BorderLayout());
         bookPanel.add(bookScroller);
-        bookPanel.add(newBookButton);
+        JPanel buttonBookPanel = new JPanel();
+        buttonBookPanel.add(BorderLayout.SOUTH, newBookButton);
+        buttonBookPanel.add(BorderLayout.SOUTH, saveBookList);
+
+        bookPanel.add(BorderLayout.SOUTH, buttonBookPanel);
 
 
+        readerPanel.setLayout(new BorderLayout());
         readerPanel.add(readerScroller);
-        readerPanel.add(newReaderButton);
+        JPanel buttonReaderPanel = new JPanel();
+        buttonReaderPanel.setLayout(new GridLayout(10, 0));
+        buttonReaderPanel.add(BorderLayout.NORTH, newReaderButton);
+        buttonReaderPanel.add(BorderLayout.CENTER, saveReaderList);
+        readerPanel.add(BorderLayout.EAST, buttonReaderPanel);
 
 
         jTabbedPane = new JTabbedPane();
         jTabbedPane.addTab("Books", bookPanel);
-        jTabbedPane.addTab("Readers", readerPanel);
+
+        //TODO ВЫТАЩИТЬ ДВЕ ПАНЕЛИ
+        ReaderPanel readerPanel1 = new ReaderPanel();
+        jTabbedPane.addTab("Readers", readerPanel1);
         jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
         jPanel.add(jTabbedPane);
+
+
         //меню действий
         JMenuBar jMenuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
+        JMenuItem openFileItem = new JMenuItem("Open file");
+        openFileItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int ret = fileChooser.showDialog(null, "Open file");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    listBooks.addAll(testData.readBookFromFile(file.getAbsolutePath()));
+                    bookTable.updateUI();
+                }
+            }
+        });
         JMenuItem addNewItem = new JMenuItem("Add new");
         JMenuItem saveItem = new JMenuItem("Save all");
         JMenuItem clearListItem = new JMenuItem("Clear all");
+        fileMenu.add(openFileItem);
         fileMenu.add(addNewItem);
         fileMenu.add(saveItem);
         fileMenu.add(clearListItem);
@@ -154,8 +194,5 @@ public class LibraryGui {
         frame.setJMenuBar(jMenuBar);
         frame.getContentPane().add(jPanel);
         frame.setVisible(true);
-
     }
-
-
 }

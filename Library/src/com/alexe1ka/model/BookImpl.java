@@ -2,12 +2,11 @@ package com.alexe1ka.model;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     private String title;
     private String authors;
-    private Date yearOfPublishing;//здесь используется дата,только потому что это написано в задании.
+    private String yearOfPublishing;
     private Genre genre;
     private Integer pageCount;
     private boolean inStorehouse;
@@ -17,7 +16,7 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     public BookImpl() {
     }
 
-    public BookImpl(String title, String author, Date yearOfPublishing, Genre genre, Integer pageCount, boolean inStorehouse) {
+    public BookImpl(String title, String author, String yearOfPublishing, Genre genre, Integer pageCount, boolean inStorehouse) {
         this.title = title;
         this.authors = author;
         this.yearOfPublishing = yearOfPublishing;
@@ -45,11 +44,11 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
     }
 
     @Override
-    public Date getYearOfPublishing() {
+    public String getYearOfPublishing() {
         return yearOfPublishing;
     }
 
-    public void setYearOfPublishing(Date yearOfPublishing) {
+    public void setYearOfPublishing(String yearOfPublishing) {
         this.yearOfPublishing = yearOfPublishing;
     }
 
@@ -104,12 +103,10 @@ public class BookImpl implements Book, Comparable<BookImpl>, Serializable {
 
     @Override
     public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
-        String onlyYear = dateFormat.format(yearOfPublishing);
         return "BookImpl{" +
                 "title='" + title + '\'' +
                 ", authors='" + authors + '\'' +
-                ", yearOfPublishing=" + onlyYear +
+                ", yearOfPublishing=" + yearOfPublishing +
                 ", genre=" + genre +
                 ", pageCount=" + pageCount +
                 ", inStorehouse=" + inStorehouse +

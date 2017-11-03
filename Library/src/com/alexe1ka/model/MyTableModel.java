@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class MyTableModel implements TableModel {
 
-    //table model работает в связке с моей моделью
+    //my table model работает в связке с моей моделью
     private Set<TableModelListener> listeners = new HashSet<>();
 
     private List<BookImpl> books = null;
@@ -21,7 +21,6 @@ public class MyTableModel implements TableModel {
 
     public void addNewBook(BookImpl book) {
         books.add(book);
-
     }
 
     @Override
@@ -62,7 +61,7 @@ public class MyTableModel implements TableModel {
             case 1:
                 return String.class;
             case 2:
-                return Date.class;
+                return String.class;
             case 3:
                 return Genre.class;
             case 4:
@@ -103,13 +102,13 @@ public class MyTableModel implements TableModel {
         BookImpl book = books.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                book.setAuthors((String) aValue);
+                book.setTitle((String) aValue);
                 break;
             case 1:
                 book.setAuthors((String) aValue);
                 break;
             case 2:
-                book.setYearOfPublishing((Date) aValue);
+                book.setYearOfPublishing((String) aValue);
                 break;
             case 3:
                 book.setGenre((Genre) aValue);
@@ -121,6 +120,15 @@ public class MyTableModel implements TableModel {
                 book.setInStorehouse((boolean) aValue);
                 break;
         }
+    }
+
+
+    public List<BookImpl> getBooksList() {
+        return books;
+    }
+
+    public void setBooks(List<BookImpl> books) {
+        this.books = books;
     }
 
     @Override
