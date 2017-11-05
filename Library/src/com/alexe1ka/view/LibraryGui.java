@@ -2,20 +2,14 @@ package com.alexe1ka.view;
 
 import com.alexe1ka.TestData;
 import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.BookReader;
-import com.alexe1ka.model.Genre;
-import com.alexe1ka.model.MyTableModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class LibraryGui {
     private JFrame frame;
@@ -33,16 +27,13 @@ public class LibraryGui {
         BookPanel bookPanel = new BookPanel();
         ReaderPanel readerPanel = new ReaderPanel();
 
-
         jTabbedPane = new JTabbedPane();
         jTabbedPane.addTab("Books", bookPanel);
-
-        //TODO ВЫТАЩИТЬ ДВЕ ПАНЕЛИ
         jTabbedPane.addTab("Readers", readerPanel);
+
         jPanel = new JPanel();
         jPanel.setLayout(new BorderLayout());
         jPanel.add(jTabbedPane);
-
 
         //меню действий
         JMenuBar jMenuBar = new JMenuBar();
@@ -51,26 +42,31 @@ public class LibraryGui {
         openFileItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 JFileChooser fileChooser = new JFileChooser();
                 int ret = fileChooser.showDialog(null, "Open file");
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
-//                    listBooks.addAll(testData.readBookFromFile(file.getAbsolutePath()));
-//                    bookTable.updateUI();
+                    List<BookImpl> books = new ArrayList<>();
+                    books.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
+                    bookPanel.setListBooks(books);
+                    bookPanel.getBookTable().updateUI();
                 }
             }
         });
-        JMenuItem addNewItem = new JMenuItem("Add new");
-        JMenuItem saveItem = new JMenuItem("Save all");
-        JMenuItem clearListItem = new JMenuItem("Clear all");
+//        JMenuItem addNewItem = new JMenuItem("Add new");
+//        JMenuItem saveItem = new JMenuItem("Save all");
+//        JMenuItem clearListItem = new JMenuItem("Clear all");
         fileMenu.add(openFileItem);
-        fileMenu.add(addNewItem);
-        fileMenu.add(saveItem);
-        fileMenu.add(clearListItem);
+//        fileMenu.add(addNewItem);
+//        fileMenu.add(saveItem);
+//        fileMenu.add(clearListItem);
 
         jMenuBar.add(fileMenu);
         frame.setJMenuBar(jMenuBar);
-        frame.getContentPane().add(jPanel);
+        frame.add(jPanel);
         frame.setVisible(true);
     }
+
+
 }

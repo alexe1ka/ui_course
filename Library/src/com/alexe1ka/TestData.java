@@ -65,7 +65,7 @@ public class TestData {
 
         books.add(new BookImpl("Core Java.Volume II - Advanced Features", "Cay Horstmann",
                 "2017",
-                Genre.TRILLER,
+                Genre.THRILLER,
                 500, false));
 
 

@@ -1,10 +1,13 @@
 package com.alexe1ka.view;
 
 import com.alexe1ka.TestData;
+import com.alexe1ka.model.BookImpl;
 import com.alexe1ka.model.BookReader;
 import sun.plugin.javascript.JSClassLoader;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,12 +21,15 @@ public class ReaderPanel extends JPanel {
     private JScrollPane readerScroller;
     private Button newReaderButton;
     private Button saveReaderList;
+    private List<BookImpl> usesBooksList;
+    private JComboBox comboBox;
 
     public ReaderPanel() {
         //вкладка с читателями отображает вкладку с читателями,которые взяли книги из хранилища
         //здесь другой способ формирования таблицы - с помощью DefaultTableModel
         //чтобы нормально раскидать BookReader по столбцам,написан костыль в виде метода getFieldArray
         super();
+
 
         List<BookReader> readerList = new ArrayList<>();
         readerList.addAll(TestData.getInstance().readReaderFromFile());
@@ -40,6 +46,16 @@ public class ReaderPanel extends JPanel {
             model.insertRow(i, readerList.get(i).getFieldArray());
         }
         model.fireTableDataChanged();
+
+
+        //выбор книги для читателя
+//        comboBox = new JComboBox();
+//        usesBooksList = BookPanel.getListBooks();
+//        for (int i = 0; i < usesBooksList.size(); i++) {
+//            comboBox.addItem(usesBooksList.get(i).getTitle());
+//        }
+//        readerTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
+        readerTable.getColumnModel().getColumn(1).setCellEditor(new BookComboBox());
 
 
         readerTable.setRowHeight(30);
@@ -67,7 +83,6 @@ public class ReaderPanel extends JPanel {
         buttonReaderPanel.add(BorderLayout.NORTH, newReaderButton);
         buttonReaderPanel.add(BorderLayout.CENTER, saveReaderList);
         add(BorderLayout.EAST, buttonReaderPanel);
-
     }
 
     public DefaultTableModel getModel() {

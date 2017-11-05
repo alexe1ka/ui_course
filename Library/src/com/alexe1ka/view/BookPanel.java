@@ -9,23 +9,28 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class BookPanel extends JPanel {
+public class BookPanel extends JPanel implements ActionListener {
     private JTable bookTable;
     private JScrollPane bookScroller;
+
+    private Button openDataButton;
     private Button newBookButton;
     private Button saveBookList;
 
+    private List<BookImpl> listBooks;
+    private MyTableModel bookTableModel;
+
 
     public BookPanel() {
-        TestData testData = TestData.getInstance();
-        List<BookImpl> listBooks = new ArrayList<>();
+        listBooks = new ArrayList<>();
         //listBooks.addAll(testData.readBookFromFile());// добавление тестовых данных
-        MyTableModel bookTableModel = new MyTableModel(listBooks);
+        bookTableModel = new MyTableModel(listBooks);
 
         //вкладка с книгами отображает таблицу со всеми книгами.формирование таблицы
         //формирование таблицы с помощью класса MyTableModel
@@ -45,41 +50,91 @@ public class BookPanel extends JPanel {
         bookScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         //выбор жанра из существующих
-        JComboBox comboBox = new JComboBox();
+        JComboBox<Genre> comboBox = new JComboBox<>();
         Genre[] listOfEnumValue = Genre.values();
-        for (int i = 0; i < listOfEnumValue.length; i++) {
-            comboBox.addItem(listOfEnumValue[i]);
+        for (Genre genre : listOfEnumValue) {
+            comboBox.addItem(genre);
         }
         bookTable.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(comboBox));
 
 
-        newBookButton = new Button("New book");
-        newBookButton.addActionListener(new ActionListener() {
+        //кнопки
+        openDataButton = new Button("Open data");
+        openDataButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                bookTableModel.addNewBook(new BookImpl(null, null, null, null, null, false));//создаю пустую книгу
-                bookTable.updateUI();
+                JFileChooser fileChooser = new JFileChooser();
+                int ret = fileChooser.showDialog(null, "Open file");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
+                    bookTable.updateUI();
+                }
             }
         });
+
+
+        AddBookDialog addBookDialog = new AddBookDialog(null, false);
+
+        newBookButton = new Button("New book");
+        newBookButton.addActionListener(this);
 
 
         saveBookList = new Button("Save new list");
         saveBookList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Save books DB");
+                int userSelection = fileChooser.showSaveDialog(null);
                 Set<BookImpl> set = new TreeSet<>();
                 set.addAll(bookTableModel.getBooksList());
-                testData.saveToFile(set, "books");
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    TestData.getInstance().saveToFile(set, fileToSave.getAbsolutePath());
+                }
             }
         });
 
-        //вкладки
 //       setLayout(new GridLayout());
         setLayout(new BorderLayout());
         add(bookScroller);
         JPanel buttonBookPanel = new JPanel();
+        buttonBookPanel.add(BorderLayout.SOUTH, openDataButton);
         buttonBookPanel.add(BorderLayout.SOUTH, newBookButton);
         buttonBookPanel.add(BorderLayout.SOUTH, saveBookList);
         add(BorderLayout.SOUTH, buttonBookPanel);
+    }
+
+
+    public JTable getBookTable() {
+        return bookTable;
+    }
+
+    public void setBookTable(JTable bookTable) {
+        this.bookTable = bookTable;
+    }
+
+    public List<BookImpl> getListBooks() {
+        return listBooks;
+    }
+
+    public void setListBooks(List<BookImpl> listBooks) {
+        this.listBooks = listBooks;
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Object source = e.getSource();
+        if (source == newBookButton) {
+            AddBookDialog addBookDialog = new AddBookDialog(null, true);
+            addBookDialog.setSize(new Dimension(500, 250));
+            addBookDialog.setVisible(true);
+            BookImpl newBook = addBookDialog.getNewBook();
+            System.out.println(newBook);
+            bookTableModel.addNewBook(newBook);
+            bookTable.updateUI();
+        }
     }
 }

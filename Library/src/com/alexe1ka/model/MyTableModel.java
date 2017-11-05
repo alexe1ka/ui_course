@@ -74,8 +74,8 @@ public class MyTableModel implements TableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return true;
-    }
+        return false;
+    }//TODO запрет на редактирование.сделать переключение
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
