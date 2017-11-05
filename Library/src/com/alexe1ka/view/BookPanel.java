@@ -21,6 +21,7 @@ public class BookPanel extends JPanel implements ActionListener {
 
     private Button openDataButton;
     private Button newBookButton;
+    private Button editBookButton;
     private Button saveBookList;
 
     private List<BookImpl> listBooks;
@@ -32,7 +33,7 @@ public class BookPanel extends JPanel implements ActionListener {
         //listBooks.addAll(testData.readBookFromFile());// добавление тестовых данных
         bookTableModel = new MyTableModel(listBooks);
 
-        //вкладка с книгами отображает таблицу со всеми книгами.формирование таблицы
+        //вкладка с книгами отображает таблицу со всеми книгами.
         //формирование таблицы с помощью класса MyTableModel
         bookTable = new JTable(bookTableModel);
         bookTable.setRowHeight(30);
@@ -74,8 +75,6 @@ public class BookPanel extends JPanel implements ActionListener {
         });
 
 
-        AddBookDialog addBookDialog = new AddBookDialog(null, false);
-
         newBookButton = new Button("New book");
         newBookButton.addActionListener(this);
 
@@ -96,13 +95,35 @@ public class BookPanel extends JPanel implements ActionListener {
             }
         });
 
+        editBookButton = new Button("Edit current book");
+        editBookButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = bookTable.getSelectedRow();
+                AddBookDialog addBookDialog = new AddBookDialog(null,
+                        true,
+                        bookTableModel.getValueAt(selectedRow, 0),
+                        bookTableModel.getValueAt(selectedRow, 1),
+                        bookTableModel.getValueAt(selectedRow, 2),
+                        bookTableModel.getValueAt(selectedRow, 3),
+                        bookTableModel.getValueAt(selectedRow, 4),
+                        bookTableModel.getValueAt(selectedRow, 5));
+                editBookDialog.setVisible(true);
+//                bookTableModel.setValueAt("CHECK",selectedRow,0);
+                updateUI();
+            }
+        });
+
 //       setLayout(new GridLayout());
         setLayout(new BorderLayout());
         add(bookScroller);
         JPanel buttonBookPanel = new JPanel();
         buttonBookPanel.add(BorderLayout.SOUTH, openDataButton);
         buttonBookPanel.add(BorderLayout.SOUTH, newBookButton);
+        buttonBookPanel.add(BorderLayout.SOUTH, editBookButton);
         buttonBookPanel.add(BorderLayout.SOUTH, saveBookList);
+
+
         add(BorderLayout.SOUTH, buttonBookPanel);
     }
 
@@ -132,9 +153,11 @@ public class BookPanel extends JPanel implements ActionListener {
             addBookDialog.setSize(new Dimension(500, 250));
             addBookDialog.setVisible(true);
             BookImpl newBook = addBookDialog.getNewBook();
-            System.out.println(newBook);
-            bookTableModel.addNewBook(newBook);
-            bookTable.updateUI();
+            if (newBook != null) {
+                System.out.println(newBook);
+                bookTableModel.addNewBook(newBook);
+                bookTable.updateUI();
+            }
         }
     }
 }

@@ -38,26 +38,17 @@ public class LibraryGui {
         //меню действий
         JMenuBar jMenuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
-        JMenuItem openFileItem = new JMenuItem("Open file");
-        openFileItem.addActionListener(new ActionListener() {
+        JMenuItem helpItem = new JMenuItem("Help");
+        helpItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                JFileChooser fileChooser = new JFileChooser();
-                int ret = fileChooser.showDialog(null, "Open file");
-                if (ret == JFileChooser.APPROVE_OPTION) {
-                    File file = fileChooser.getSelectedFile();
-                    List<BookImpl> books = new ArrayList<>();
-                    books.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
-                    bookPanel.setListBooks(books);
-                    bookPanel.getBookTable().updateUI();
-                }
+                JOptionPane.showMessageDialog(null, "Учет книг.Откройте таблицу с читателями и поработайте с ней");
             }
         });
 //        JMenuItem addNewItem = new JMenuItem("Add new");
 //        JMenuItem saveItem = new JMenuItem("Save all");
 //        JMenuItem clearListItem = new JMenuItem("Clear all");
-        fileMenu.add(openFileItem);
+        fileMenu.add(helpItem);
 //        fileMenu.add(addNewItem);
 //        fileMenu.add(saveItem);
 //        fileMenu.add(clearListItem);

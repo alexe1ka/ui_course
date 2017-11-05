@@ -26,11 +26,11 @@ class BookComboBox extends DefaultCellEditor {
         //TODO сделать названия книг
         obtainedList = new ArrayList<String>();
 
-        obtainedList.add("One");
-        obtainedList.add("Two");
-        obtainedList.add("Three");
-        obtainedList.add("Four");
-        obtainedList.add("Five");
+        obtainedList.add("Book one");
+        obtainedList.add("Book two");
+        obtainedList.add("Book three");
+        obtainedList.add("Book four");
+        obtainedList.add("Book five");
 
     }
 

@@ -4,9 +4,15 @@ import com.alexe1ka.model.BookImpl;
 import com.alexe1ka.model.Genre;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddBookDialog extends JDialog implements ActionListener {
     private JLabel titleLabel;
@@ -17,23 +23,25 @@ public class AddBookDialog extends JDialog implements ActionListener {
 
     private JTextField titleField;
     private JTextField authorField;
-    private JTextField yearField;
+    private JFormattedTextField yearField;
     private JComboBox<Genre> genreBox;
-    private JTextField pageCountField;
+    private JFormattedTextField pageCountField;
 
     private Button okButton;
     private BookImpl newBook;
-
-    private boolean isResultOk;
-
 
     public AddBookDialog(Frame owner, boolean modal) {
         super(owner, modal);
         init();
     }
 
+    public AddBookDialog(Frame owner,
+                         boolean modal, Object valueAt, Object valueAt1, Object valueAt2, Object valueAt3, Object valueAt4, Object valueAt5) {
+        super(owner,modal);
+        
+    }
+
     private void init() {
-        isResultOk = false;
 
         titleLabel = new JLabel("Title");
         authorLabel = new JLabel("Author");
@@ -43,9 +51,19 @@ public class AddBookDialog extends JDialog implements ActionListener {
 
         titleField = new JTextField();
         authorField = new JTextField();
-        yearField = new JTextField();
+        try {
+            yearField = new JFormattedTextField(new MaskFormatter("####"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         genreBox = new JComboBox<>();
-        pageCountField = new JTextField();
+
+        try {
+            pageCountField = new JFormattedTextField(new MaskFormatter("*###"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         okButton = new Button();
 
@@ -95,16 +113,18 @@ public class AddBookDialog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == okButton) {
-            newBook = new BookImpl(titleField.getText(),
-                    authorField.getText(),
-                    yearField.getText(),
-                    (Genre) genreBox.getSelectedItem(),
-                    new Integer(pageCountField.getText()),
-                    true);
+            if (titleField.getText().equals("") || authorField.getText().equals("") || yearField.getText().equals("") || pageCountField.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "All fields must be input!");
+            } else {
+                newBook = new BookImpl(titleField.getText(),
+                        authorField.getText(),
+                        yearField.getText(),
+                        (Genre) genreBox.getSelectedItem(),
+                        new Integer(pageCountField.getText()),
+                        true);
+                dispose();
+            }
         }
-        else {
-            newBook = new BookImpl(null,null,null,null,null,false);
-        }
-        dispose();
+
     }
 }
