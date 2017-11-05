@@ -23,6 +23,11 @@ public class MyTableModel implements TableModel {
         books.add(book);
     }
 
+    public void editBook(BookImpl book,int index) {
+        books.remove(index);
+        books.add(index,book);
+    }
+
     @Override
     public int getRowCount() {
 //        System.out.println("size of books: "+books.size());

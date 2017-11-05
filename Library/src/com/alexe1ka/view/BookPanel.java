@@ -106,10 +106,16 @@ public class BookPanel extends JPanel implements ActionListener {
                         bookTableModel.getValueAt(selectedRow, 1),
                         bookTableModel.getValueAt(selectedRow, 2),
                         bookTableModel.getValueAt(selectedRow, 3),
-                        bookTableModel.getValueAt(selectedRow, 4),
-                        bookTableModel.getValueAt(selectedRow, 5));
-                editBookDialog.setVisible(true);
+                        bookTableModel.getValueAt(selectedRow, 4));
+                addBookDialog.setSize(new Dimension(500, 250));
+                addBookDialog.setVisible(true);
 //                bookTableModel.setValueAt("CHECK",selectedRow,0);
+                BookImpl editBook = addBookDialog.getBook();
+                if (editBook != null) {
+                    System.out.println(editBook);
+                    bookTableModel.editBook(editBook, selectedRow);
+                    bookTable.updateUI();
+                }
                 updateUI();
             }
         });
@@ -152,7 +158,7 @@ public class BookPanel extends JPanel implements ActionListener {
             AddBookDialog addBookDialog = new AddBookDialog(null, true);
             addBookDialog.setSize(new Dimension(500, 250));
             addBookDialog.setVisible(true);
-            BookImpl newBook = addBookDialog.getNewBook();
+            BookImpl newBook = addBookDialog.getBook();
             if (newBook != null) {
                 System.out.println(newBook);
                 bookTableModel.addNewBook(newBook);
