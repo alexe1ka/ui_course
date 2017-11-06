@@ -56,7 +56,9 @@ public class LibraryGui {
         jMenuBar.add(fileMenu);
         frame.setJMenuBar(jMenuBar);
         frame.add(jPanel);
+        frame.setTitle("Library application");
         frame.setVisible(true);
+
     }
 
 
