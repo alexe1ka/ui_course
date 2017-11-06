@@ -98,6 +98,15 @@ public class AddBookDialog extends JDialog implements ActionListener {
         yearField.setText((String) valueAt2);
 
         genreBox = new JComboBox<>();
+        Genre[] listOfEnumValue = Genre.values();
+        for (Genre genre : listOfEnumValue) {
+            genreBox.addItem(genre);
+        }
+        for (int i = 0; i < listOfEnumValue.length; i++) {
+            if (listOfEnumValue[i] == valueAt3) {
+                genreBox.setSelectedIndex(i);
+            }
+        }
 
 
         try {
@@ -110,10 +119,7 @@ public class AddBookDialog extends JDialog implements ActionListener {
 
         okButton = new Button();
 
-        Genre[] listOfEnumValue = Genre.values();
-        for (Genre genre : listOfEnumValue) {
-            genreBox.addItem(genre);
-        }
+
         this.setLayout(new BorderLayout());
         this.setTitle("Add new book");
 

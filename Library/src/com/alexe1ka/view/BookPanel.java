@@ -68,6 +68,7 @@ public class BookPanel extends JPanel implements ActionListener {
                 int ret = fileChooser.showDialog(null, "Open file");
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
+                    listBooks.clear();
                     listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
                     bookTable.updateUI();
                 }
