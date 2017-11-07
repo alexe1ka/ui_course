@@ -1,9 +1,9 @@
-package com.alexe1ka.view;
+package main.java.com.alexe1ka.view;
 
-import com.alexe1ka.TestData;
-import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.Genre;
-import com.alexe1ka.model.MyTableModel;
+import main.java.com.alexe1ka.TestData;
+import main.java.com.alexe1ka.model.BookImpl;
+import main.java.com.alexe1ka.model.Genre;
+import main.java.com.alexe1ka.model.MyTableModel;
 
 import javax.swing.*;
 import java.awt.*;

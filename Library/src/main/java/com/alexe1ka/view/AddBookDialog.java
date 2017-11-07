@@ -1,7 +1,7 @@
-package com.alexe1ka.view;
+package main.java.com.alexe1ka.view;
 
-import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.Genre;
+import main.java.com.alexe1ka.model.BookImpl;
+import main.java.com.alexe1ka.model.Genre;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 
 public class AddBookDialog extends JDialog implements ActionListener {
+
     private JLabel titleLabel = new JLabel("Title");
     private JLabel authorLabel = new JLabel("Author");
     private JLabel yearLabel = new JLabel("Year");

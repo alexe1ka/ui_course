@@ -1,4 +1,4 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -23,7 +23,7 @@ public class MyTableModel implements TableModel {
         books.add(book);
     }
 
-    public void editBook(BookImpl book,int index) {
+    public void editBook(BookImpl book, int index) {
         books.remove(index);
         books.add(index,book);
     }

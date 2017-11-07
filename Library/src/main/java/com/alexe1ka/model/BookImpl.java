@@ -1,4 +1,6 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
+
+import main.java.com.alexe1ka.model.Genre;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

@@ -1,26 +1,32 @@
-package com.alexe1ka.view;
+package main.java.com.alexe1ka.view;
 
-import com.alexe1ka.TestData;
-import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.BookReader;
-import sun.plugin.javascript.JSClassLoader;
+
+
+import main.java.com.alexe1ka.TestData;
+import main.java.com.alexe1ka.model.BookImpl;
+import main.java.com.alexe1ka.model.BookReader;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ReaderPanel extends JPanel {
     private DefaultTableModel model;
     private JTable readerTable;
     private JScrollPane readerScroller;
+
     private Button newReaderButton;
     private Button saveReaderList;
+    private Button openReaderList;
+    private Button editCurrentReader;
+
     private List<BookImpl> usesBooksList;
     private JComboBox comboBox;
 
@@ -32,7 +38,7 @@ public class ReaderPanel extends JPanel {
 
 
         List<BookReader> readerList = new ArrayList<>();
-        readerList.addAll(TestData.getInstance().readReaderFromFile());
+//        readerList.addAll(TestData.getInstance().readReaderFromFile("readers"));//загрузка тестовых данных
 
         model = new DefaultTableModel();
         readerTable = new JTable(model);
@@ -73,7 +79,47 @@ public class ReaderPanel extends JPanel {
             }
         });
 
-        saveReaderList = new Button("Save new list");
+        saveReaderList = new Button("Save reader list");
+        saveReaderList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Save readers DB");
+                int userSelection = fileChooser.showSaveDialog(null);
+                Set<BookReader> set = new TreeSet<>();
+                set.addAll(readerList);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    TestData.getInstance().saveToFile(set, fileToSave.getAbsolutePath());
+                }
+            }
+        });
+
+        openReaderList = new Button("Open readers list");
+        openReaderList.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int ret = fileChooser.showDialog(null, "Open file");
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    File file = fileChooser.getSelectedFile();
+                    readerList.clear();
+                    readerList.addAll(TestData.getInstance().readReaderFromFile(file.getAbsolutePath()));
+                    for (int i = 0; i < readerList.size(); i++) {
+                        model.insertRow(i, readerList.get(i).getFieldArray());
+                    }
+
+                }
+            }
+        });
+
+        editCurrentReader = new Button("Edit current ");
+        editCurrentReader.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
 
         setLayout(new BorderLayout());
@@ -82,6 +128,8 @@ public class ReaderPanel extends JPanel {
         buttonReaderPanel.setLayout(new GridLayout(10, 0));
         buttonReaderPanel.add(BorderLayout.NORTH, newReaderButton);
         buttonReaderPanel.add(BorderLayout.CENTER, saveReaderList);
+        buttonReaderPanel.add(BorderLayout.CENTER, openReaderList);
+        buttonReaderPanel.add(BorderLayout.CENTER, editCurrentReader);
         add(BorderLayout.EAST, buttonReaderPanel);
     }
 

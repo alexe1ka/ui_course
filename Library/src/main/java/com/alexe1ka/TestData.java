@@ -1,8 +1,9 @@
-package com.alexe1ka;
+package main.java.com.alexe1ka;
 
-import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.BookReader;
-import com.alexe1ka.model.Genre;
+
+import main.java.com.alexe1ka.model.BookImpl;
+import main.java.com.alexe1ka.model.BookReader;
+import main.java.com.alexe1ka.model.Genre;
 
 import java.io.*;
 import java.util.Calendar;
@@ -97,7 +98,7 @@ public class TestData {
         ));
 
         saveToFile(bookReaders, "readers");
-        Set<?> readedSet = readReaderFromFile();
+        Set<?> readedSet = readReaderFromFile("readers");
         System.out.println("readers from file");
         for (Object aReadedSet : readedSet) {
             System.out.println(aReadedSet);
@@ -128,10 +129,10 @@ public class TestData {
         return books;
     }
 
-    public Set<BookReader> readReaderFromFile() {
+    public Set<BookReader> readReaderFromFile(String filename) {
         Set<BookReader> readers = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("readers"));
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
             readers = (Set<BookReader>) objectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();

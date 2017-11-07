@@ -1,20 +1,15 @@
-package com.alexe1ka.view;
-
-import com.alexe1ka.TestData;
-import com.alexe1ka.model.BookImpl;
+package main.java.com.alexe1ka.view;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LibraryGui {
     private JFrame frame;
     private JTabbedPane jTabbedPane;
     private JPanel jPanel;
+
 
 
     public void gui() {

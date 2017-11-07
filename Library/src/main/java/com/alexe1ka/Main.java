@@ -1,6 +1,6 @@
-package com.alexe1ka;
+package main.java.com.alexe1ka;
 
-import com.alexe1ka.view.LibraryGui;
+import main.java.com.alexe1ka.view.LibraryGui;
 
 import javax.swing.*;
 

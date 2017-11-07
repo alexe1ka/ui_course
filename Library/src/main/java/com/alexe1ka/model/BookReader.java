@@ -1,4 +1,4 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
 
 import java.io.Serializable;
 import java.util.Date;
