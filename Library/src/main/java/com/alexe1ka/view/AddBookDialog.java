@@ -71,20 +71,9 @@ public class AddBookDialog extends JDialog implements ActionListener {
     private void addInit() {
         titleField = new JTextField();
         authorField = new JTextField();
-
-        SpinnerModel model = new SpinnerDateModel();
-
-
-        yearField = new JSpinner(model);
-        JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");
-        yearField.setEditor(editor);
-        JFormattedTextField tf = ((JSpinner.DefaultEditor) yearField.getEditor()).getTextField();
-        tf.setEditable(false);//гарантированный выбор годов
-
-        System.out.println(yearFormat.format(yearField.getValue()));
+        makeSpinner();
 
         genreBox = new JComboBox<>();
-
 
         try {
             pageCountField = new JFormattedTextField(new MaskFormatter("****"));
@@ -92,7 +81,6 @@ public class AddBookDialog extends JDialog implements ActionListener {
             e.printStackTrace();
         }
         pageCountField.addKeyListener(yearKeyAdapter);
-
 
         okButton = new Button();
 
@@ -131,11 +119,7 @@ public class AddBookDialog extends JDialog implements ActionListener {
         titleField = new JTextField((String) valueAt);
         authorField = new JTextField((String) valueAt1);
 
-        SpinnerModel model = new SpinnerDateModel();
-        yearField = new JSpinner(model);
-        JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");//Отображаем именно года
-        yearField.setEditor(editor);
-
+        makeSpinner();
 
         Date date = null;
         try {
@@ -144,7 +128,6 @@ public class AddBookDialog extends JDialog implements ActionListener {
             e.printStackTrace();
         }
         yearField.setValue(date);
-
 
         genreBox = new JComboBox<>();
         Genre[] listOfEnumValue = Genre.values();
@@ -157,7 +140,6 @@ public class AddBookDialog extends JDialog implements ActionListener {
             }
         }
 
-
         try {
             pageCountField = new JFormattedTextField(new MaskFormatter("****"));
         } catch (ParseException e) {
@@ -166,9 +148,7 @@ public class AddBookDialog extends JDialog implements ActionListener {
         pageCountField.setText(String.valueOf(valueAt4));
         pageCountField.addKeyListener(yearKeyAdapter);
 
-
         okButton = new Button();
-
 
         this.setLayout(new BorderLayout());
         this.setTitle("Add new book");
@@ -195,6 +175,15 @@ public class AddBookDialog extends JDialog implements ActionListener {
         buttonPanel.add(okButton);
         okButton.addActionListener(this);
         add(buttonPanel, BorderLayout.SOUTH);
+    }
+
+    private void makeSpinner() {
+        SpinnerModel model = new SpinnerDateModel();
+        yearField = new JSpinner(model);
+        JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");//Отображаем именно года
+        yearField.setEditor(editor);
+        JFormattedTextField tf = ((JSpinner.DefaultEditor) yearField.getEditor()).getTextField();
+        tf.setEditable(false);//гарантированный выбор годов
     }
 
 
