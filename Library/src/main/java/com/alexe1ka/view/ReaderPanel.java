@@ -4,7 +4,6 @@ package main.java.com.alexe1ka.view;
 import main.java.com.alexe1ka.TestData;
 import main.java.com.alexe1ka.model.BookImpl;
 import main.java.com.alexe1ka.model.BookReader;
-import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

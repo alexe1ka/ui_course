@@ -2,18 +2,16 @@ package main.java.com.alexe1ka.view;
 
 import main.java.com.alexe1ka.model.BookImpl;
 import main.java.com.alexe1ka.model.Genre;
-import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.JXFormattedTextField;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class AddBookDialog extends JDialog implements ActionListener {
@@ -28,14 +26,35 @@ public class AddBookDialog extends JDialog implements ActionListener {
     private JTextField authorField;
     private JSpinner yearField;
 
-
     private JComboBox<Genre> genreBox;
     private JFormattedTextField pageCountField;
 
     private Button okButton;
     private BookImpl newBook;
 
-    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");//нам нужен только год
+    private SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");//нам нужен только год
+    private KeyAdapter yearKeyAdapter = new KeyAdapter() {
+        //            @Override
+//            public void keyTyped(KeyEvent e) {
+//                String input = pageCountField.getText();
+//                Pattern pattern = Pattern.compile("[0-9]{4}|[0-9]{3}|[0-9]{2}|[0-9]");
+//                Matcher matcher = pattern.matcher(input);
+//                if (!matcher.find()) {
+//                    JOptionPane.showMessageDialog(getParent(), "Можно вводить только цифры", "Error!", JOptionPane.ERROR_MESSAGE);
+//                    pageCountField.setText("");
+//                }
+//            }
+
+        @Override
+        public void keyPressed(KeyEvent e) {//если ввели букву - ошибка
+            if (e.getKeyChar() >= 'a' && e.getKeyChar() <= 'z') {
+                JOptionPane.showMessageDialog(getParent(), "Можно вводить только цифры", "Error!", JOptionPane.ERROR_MESSAGE);
+                pageCountField.setText("");
+            } else {
+                pageCountField.setEditable(true);
+            }
+        }
+    };
 
 
     public AddBookDialog(Frame owner, boolean modal) {
@@ -53,21 +72,26 @@ public class AddBookDialog extends JDialog implements ActionListener {
         titleField = new JTextField();
         authorField = new JTextField();
 
-
         SpinnerModel model = new SpinnerDateModel();
+
+
         yearField = new JSpinner(model);
         JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");
         yearField.setEditor(editor);
-        System.out.println(yearFormat.format(yearField.getValue()));
+        JFormattedTextField tf = ((JSpinner.DefaultEditor) yearField.getEditor()).getTextField();
+        tf.setEditable(false);//гарантированный выбор годов
 
+        System.out.println(yearFormat.format(yearField.getValue()));
 
         genreBox = new JComboBox<>();
 
+
         try {
-            pageCountField = new JFormattedTextField(new MaskFormatter("*###"));
+            pageCountField = new JFormattedTextField(new MaskFormatter("****"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        pageCountField.addKeyListener(yearKeyAdapter);
 
 
         okButton = new Button();
@@ -135,11 +159,12 @@ public class AddBookDialog extends JDialog implements ActionListener {
 
 
         try {
-            pageCountField = new JFormattedTextField(new MaskFormatter("*###"));
+            pageCountField = new JFormattedTextField(new MaskFormatter("****"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         pageCountField.setText(String.valueOf(valueAt4));
+        pageCountField.addKeyListener(yearKeyAdapter);
 
 
         okButton = new Button();
@@ -184,11 +209,12 @@ public class AddBookDialog extends JDialog implements ActionListener {
             if (titleField.getText().equals("") || authorField.getText().equals("") || yearField.getValue().equals("") || pageCountField.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "All fields must be input!");
             } else {
+                System.out.println(pageCountField.getText());
                 newBook = new BookImpl(titleField.getText(),
                         authorField.getText(),
                         yearFormat.format(yearField.getValue()),
                         (Genre) genreBox.getSelectedItem(),
-                        new Integer(pageCountField.getText()),
+                        new Integer(pageCountField.getText().trim()),
                         true);
                 dispose();
             }
