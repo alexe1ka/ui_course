@@ -73,13 +73,21 @@ public class BookPanel extends JPanel implements ActionListener {
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     listBooks.clear();
-                    try {
-                        listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
-                    } catch (IOException e1) {
-                        JOptionPane.showMessageDialog(getParent(), "Ошибка", "Error!", JOptionPane.ERROR_MESSAGE);
-                    } catch (ClassNotFoundException e1) {
-                        JOptionPane.showMessageDialog(getParent(), "Откройте файл с книгами", "Error!", JOptionPane.ERROR_MESSAGE);
-                    }
+                    SwingWorker worker = new SwingWorker() {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            try {
+                                listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
+                            } catch (IOException e1) {
+                                JOptionPane.showMessageDialog(getParent(), "Ошибка", "Error!", JOptionPane.ERROR_MESSAGE);
+                            } catch (ClassNotFoundException e1) {
+                                JOptionPane.showMessageDialog(getParent(), "Откройте файл с книгами", "Error!", JOptionPane.ERROR_MESSAGE);
+                            }
+                            return null;
+                        }
+                    };
+                    worker.run();
+
                     bookTable.updateUI();
                 }
             }
