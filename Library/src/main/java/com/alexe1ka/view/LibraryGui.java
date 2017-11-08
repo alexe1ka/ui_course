@@ -55,6 +55,4 @@ public class LibraryGui {
         frame.setVisible(true);
 
     }
-
-
 }

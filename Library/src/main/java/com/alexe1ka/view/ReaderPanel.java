@@ -1,10 +1,10 @@
 package main.java.com.alexe1ka.view;
 
 
-
 import main.java.com.alexe1ka.TestData;
 import main.java.com.alexe1ka.model.BookImpl;
 import main.java.com.alexe1ka.model.BookReader;
+import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -34,6 +34,10 @@ public class ReaderPanel extends JPanel {
         //вкладка с читателями отображает вкладку с читателями,которые взяли книги из хранилища
         //здесь другой способ формирования таблицы - с помощью DefaultTableModel
         //чтобы нормально раскидать BookReader по столбцам,написан костыль в виде метода getFieldArray
+
+        //TODO ЭТА ТАБЛИЦА НЕ РАБОТАЕТ!!!она только отображает данные!
+        //ДИАЛОГОВ для добавления/редактирования тут нет!
+
         super();
 
 
@@ -76,6 +80,7 @@ public class ReaderPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 model.insertRow(model.getRowCount(), new Object[]{null, null, null, null, null});
+                readerList.add(new BookReader(null,null,null,null,null));
             }
         });
 
@@ -90,7 +95,19 @@ public class ReaderPanel extends JPanel {
                 set.addAll(readerList);
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fileChooser.getSelectedFile();
-                    TestData.getInstance().saveToFile(set, fileToSave.getAbsolutePath());
+                    new SwingWorker(){
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            TestData.getInstance().saveToFile(set, fileToSave.getAbsolutePath());
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            JOptionPane.showMessageDialog(getParent(), "List of readers saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    };
+
                 }
             }
         });
@@ -113,11 +130,14 @@ public class ReaderPanel extends JPanel {
             }
         });
 
+
+
         editCurrentReader = new Button("Edit current ");
+
+
         editCurrentReader.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
             }
         });
 

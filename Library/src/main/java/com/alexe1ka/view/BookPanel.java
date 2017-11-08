@@ -6,10 +6,13 @@ import main.java.com.alexe1ka.model.Genre;
 import main.java.com.alexe1ka.model.MyTableModel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +27,7 @@ public class BookPanel extends JPanel implements ActionListener {
     private Button editBookButton;
     private Button saveBookList;
 
-    private List<BookImpl> listBooks;
+    public List<BookImpl> listBooks;
     private MyTableModel bookTableModel;
 
 
@@ -32,6 +35,7 @@ public class BookPanel extends JPanel implements ActionListener {
         listBooks = new ArrayList<>();
         //listBooks.addAll(testData.readBookFromFile());// добавление тестовых данных
         bookTableModel = new MyTableModel(listBooks);
+
 
         //вкладка с книгами отображает таблицу со всеми книгами.
         //формирование таблицы с помощью класса MyTableModel
@@ -69,7 +73,13 @@ public class BookPanel extends JPanel implements ActionListener {
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
                     listBooks.clear();
-                    listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
+                    try {
+                        listBooks.addAll(TestData.getInstance().readBookFromFile(file.getAbsolutePath()));
+                    } catch (IOException e1) {
+                        JOptionPane.showMessageDialog(getParent(), "Ошибка", "Error!", JOptionPane.ERROR_MESSAGE);
+                    } catch (ClassNotFoundException e1) {
+                        JOptionPane.showMessageDialog(getParent(), "Откройте файл с книгами", "Error!", JOptionPane.ERROR_MESSAGE);
+                    }
                     bookTable.updateUI();
                 }
             }
@@ -79,6 +89,7 @@ public class BookPanel extends JPanel implements ActionListener {
         newBookButton = new Button("New book");
         newBookButton.addActionListener(this);
 
+        Set<BookImpl> saveSet = new TreeSet<>();
 
         saveBookList = new Button("Save new list");
         saveBookList.addActionListener(new ActionListener() {
@@ -87,11 +98,30 @@ public class BookPanel extends JPanel implements ActionListener {
                 JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Save books DB");
                 int userSelection = fileChooser.showSaveDialog(null);
-                Set<BookImpl> set = new TreeSet<>();
-                set.addAll(bookTableModel.getBooksList());
+
+                saveSet.addAll(bookTableModel.getBooksList());
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     File fileToSave = fileChooser.getSelectedFile();
-                    TestData.getInstance().saveToFile(set, fileToSave.getAbsolutePath());
+                    SwingWorker worker = new SwingWorker() {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+//                            Thread.sleep(1000);
+                            TestData.getInstance().saveToFile(saveSet, fileToSave.getAbsolutePath());
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            JOptionPane.showMessageDialog(getParent(), "Books list saved", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        }
+
+                        @Override
+                        protected void process(List chunks) {
+                            super.process(chunks);
+
+                        }
+                    };
+                    worker.run();
                 }
             }
         });

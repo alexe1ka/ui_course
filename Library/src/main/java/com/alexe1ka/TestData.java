@@ -27,7 +27,7 @@ public class TestData {
 
 
     //тестовый набор книжек
-    public void testBook() {
+    public void testBook() throws IOException, ClassNotFoundException {
         Set<BookImpl> books = new TreeSet<>();
 
         book1 = new BookImpl("Android for professional 3", "Philips B,Stuart K,Marsikano k",
@@ -116,16 +116,10 @@ public class TestData {
         }
     }
 
-    public Set<BookImpl> readBookFromFile(String filename) {
+    public Set<BookImpl> readBookFromFile(String filename) throws IOException, ClassNotFoundException {
         Set<BookImpl> books = null;
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
-            books = (Set<BookImpl>) objectInputStream.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
+        books = (Set<BookImpl>) objectInputStream.readObject();
         return books;
     }
 

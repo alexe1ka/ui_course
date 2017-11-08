@@ -2,13 +2,19 @@ package main.java.com.alexe1ka.view;
 
 import main.java.com.alexe1ka.model.BookImpl;
 import main.java.com.alexe1ka.model.Genre;
+import org.jdesktop.swingx.JXDatePicker;
+import org.jdesktop.swingx.JXFormattedTextField;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class AddBookDialog extends JDialog implements ActionListener {
 
@@ -20,12 +26,17 @@ public class AddBookDialog extends JDialog implements ActionListener {
 
     private JTextField titleField;
     private JTextField authorField;
-    private JFormattedTextField yearField;
+    private JSpinner yearField;
+
+
     private JComboBox<Genre> genreBox;
     private JFormattedTextField pageCountField;
 
     private Button okButton;
     private BookImpl newBook;
+
+    SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");//нам нужен только год
+
 
     public AddBookDialog(Frame owner, boolean modal) {
         super(owner, modal);
@@ -41,11 +52,15 @@ public class AddBookDialog extends JDialog implements ActionListener {
     private void addInit() {
         titleField = new JTextField();
         authorField = new JTextField();
-        try {
-            yearField = new JFormattedTextField(new MaskFormatter("####"));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
+
+        SpinnerModel model = new SpinnerDateModel();
+        yearField = new JSpinner(model);
+        JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");
+        yearField.setEditor(editor);
+        System.out.println(yearFormat.format(yearField.getValue()));
+
+
         genreBox = new JComboBox<>();
 
         try {
@@ -91,12 +106,21 @@ public class AddBookDialog extends JDialog implements ActionListener {
     private void editInit(Object valueAt, Object valueAt1, Object valueAt2, Object valueAt3, Object valueAt4) {
         titleField = new JTextField((String) valueAt);
         authorField = new JTextField((String) valueAt1);
+
+        SpinnerModel model = new SpinnerDateModel();
+        yearField = new JSpinner(model);
+        JComponent editor = new JSpinner.DateEditor(yearField, "yyyy");//Отображаем именно года
+        yearField.setEditor(editor);
+
+
+        Date date = null;
         try {
-            yearField = new JFormattedTextField(new MaskFormatter("####"));
+            date = yearFormat.parse((String) valueAt2);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        yearField.setText((String) valueAt2);
+        yearField.setValue(date);
+
 
         genreBox = new JComboBox<>();
         Genre[] listOfEnumValue = Genre.values();
@@ -157,18 +181,17 @@ public class AddBookDialog extends JDialog implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if (source == okButton) {
-            if (titleField.getText().equals("") || authorField.getText().equals("") || yearField.getText().equals("") || pageCountField.getText().equals("")) {
+            if (titleField.getText().equals("") || authorField.getText().equals("") || yearField.getValue().equals("") || pageCountField.getText().equals("")) {
                 JOptionPane.showMessageDialog(this, "All fields must be input!");
             } else {
                 newBook = new BookImpl(titleField.getText(),
                         authorField.getText(),
-                        yearField.getText(),
+                        yearFormat.format(yearField.getValue()),
                         (Genre) genreBox.getSelectedItem(),
                         new Integer(pageCountField.getText()),
                         true);
                 dispose();
             }
         }
-
     }
 }

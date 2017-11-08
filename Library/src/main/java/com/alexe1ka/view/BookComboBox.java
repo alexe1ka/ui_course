@@ -1,6 +1,8 @@
 package main.java.com.alexe1ka.view;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +23,13 @@ class BookComboBox extends DefaultCellEditor {
 //            obtainedList.add(BookPanel.getListBooks().get(i).getTitle());
 //        }
 
-        //TODO сделать названия книг
-        obtainedList = new ArrayList<String>();
-
+        //TODO сделать отображение названий книг
+        obtainedList = new ArrayList<>();
         obtainedList.add("Book one");
         obtainedList.add("Book two");
         obtainedList.add("Book three");
         obtainedList.add("Book four");
         obtainedList.add("Book five");
-
     }
 
     @Override
@@ -51,5 +51,13 @@ class BookComboBox extends DefaultCellEditor {
             }
         }
         return super.getTableCellEditorComponent(table, value, isSelected, row, column);
+    }
+
+    public List<String> getObtainedList() {
+        return obtainedList;
+    }
+
+    public void setObtainedList(List<String> obtainedList) {
+        this.obtainedList = obtainedList;
     }
 }
