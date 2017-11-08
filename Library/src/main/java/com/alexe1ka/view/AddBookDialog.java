@@ -151,7 +151,7 @@ public class AddBookDialog extends JDialog implements ActionListener {
         okButton = new Button();
 
         this.setLayout(new BorderLayout());
-        this.setTitle("Add new book");
+        this.setTitle("Edit book");
 
         JPanel dataPanel = new JPanel();
         dataPanel.setLayout(new GridLayout(6, 2));
