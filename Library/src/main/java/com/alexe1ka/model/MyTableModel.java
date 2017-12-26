@@ -1,4 +1,4 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
@@ -21,6 +21,11 @@ public class MyTableModel implements TableModel {
 
     public void addNewBook(BookImpl book) {
         books.add(book);
+    }
+
+    public void editBook(BookImpl book, int index) {
+        books.remove(index);
+        books.add(index,book);
     }
 
     @Override
@@ -74,6 +79,20 @@ public class MyTableModel implements TableModel {
 
     @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
+        switch (columnIndex) {
+            case 0:
+                return false;
+            case 1:
+                return false;
+            case 2:
+                return false;
+            case 3:
+                return false;
+            case 4:
+                return false;
+            case 5:
+                return true; //последняя колонка редактируемая.потому что мы получаем/выдаем книги.
+        }
         return true;
     }
 

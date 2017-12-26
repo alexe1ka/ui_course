@@ -1,4 +1,4 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,14 +6,14 @@ import java.util.Date;
 public class BookReader implements Comparable<BookReader>, Serializable {
     private String nameSurname;
     private BookImpl takingBook;
-    private long phoneNumber;
+    private Long phoneNumber;
     private String numberOfPassport;
     private Date takingBookDate;
 
     public BookReader() {
     }
 
-    public BookReader(String nameSurname, BookImpl takingBook, long phoneNumber, String numberOfPassport, Date takingBookDate) {
+    public BookReader(String nameSurname, BookImpl takingBook, Long phoneNumber, String numberOfPassport, Date takingBookDate) {
         this.nameSurname = nameSurname;
         this.takingBook = takingBook;
         this.phoneNumber = phoneNumber;
@@ -37,11 +37,11 @@ public class BookReader implements Comparable<BookReader>, Serializable {
         this.takingBook = takingBook;
     }
 
-    public long getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(long phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

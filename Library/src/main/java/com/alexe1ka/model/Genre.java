@@ -1,14 +1,14 @@
-package com.alexe1ka.model;
+package main.java.com.alexe1ka.model;
 
 public enum Genre {
     //для описания жанров
     COMEDY,
     FANTASY,
     FAIRYTALE,
-    TRILLER,
+    THRILLER,
     DRAMA,
     HORROR,
-    NOVELL,
+    NOVELLA,
     TRAGEDY,
     MYTHOLOGY,
     BIOGRAPHY,

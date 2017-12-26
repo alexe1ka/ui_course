@@ -1,8 +1,9 @@
-package com.alexe1ka;
+package main.java.com.alexe1ka;
 
-import com.alexe1ka.model.BookImpl;
-import com.alexe1ka.model.BookReader;
-import com.alexe1ka.model.Genre;
+
+import main.java.com.alexe1ka.model.BookImpl;
+import main.java.com.alexe1ka.model.BookReader;
+import main.java.com.alexe1ka.model.Genre;
 
 import java.io.*;
 import java.util.Calendar;
@@ -26,7 +27,7 @@ public class TestData {
 
 
     //тестовый набор книжек
-    public void testBook() {
+    public void testBook() throws IOException, ClassNotFoundException {
         Set<BookImpl> books = new TreeSet<>();
 
         book1 = new BookImpl("Android for professional 3", "Philips B,Stuart K,Marsikano k",
@@ -65,7 +66,7 @@ public class TestData {
 
         books.add(new BookImpl("Core Java.Volume II - Advanced Features", "Cay Horstmann",
                 "2017",
-                Genre.TRILLER,
+                Genre.THRILLER,
                 500, false));
 
 
@@ -97,7 +98,7 @@ public class TestData {
         ));
 
         saveToFile(bookReaders, "readers");
-        Set<?> readedSet = readReaderFromFile();
+        Set<?> readedSet = readReaderFromFile("readers");
         System.out.println("readers from file");
         for (Object aReadedSet : readedSet) {
             System.out.println(aReadedSet);
@@ -115,23 +116,17 @@ public class TestData {
         }
     }
 
-    public Set<BookImpl> readBookFromFile(String filename) {
+    public Set<BookImpl> readBookFromFile(String filename) throws IOException, ClassNotFoundException {
         Set<BookImpl> books = null;
-        try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
-            books = (Set<BookImpl>) objectInputStream.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
+        books = (Set<BookImpl>) objectInputStream.readObject();
         return books;
     }
 
-    public Set<BookReader> readReaderFromFile() {
+    public Set<BookReader> readReaderFromFile(String filename) {
         Set<BookReader> readers = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream("readers"));
+            ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(filename));
             readers = (Set<BookReader>) objectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
